@@ -1,19 +1,38 @@
+
 package se.iths.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 @Entity
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) // Not a requirement, but nice to have
     private Long id;
+
+    // Constraint, prevents name from not being empty and minimum 2 characters
+    @NotEmpty
+    @Size(min = 2)
     private String name;
     private String category;
     private int quantity;
     private double price;
+    private LocalDate createdAt;
+
+    @PrePersist // Runs before the object writes to the DB
+    public void getCurrentDate() {
+        setCreatedAt(LocalDate.now());
+    }
+
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public Long getId() {
         return id;
