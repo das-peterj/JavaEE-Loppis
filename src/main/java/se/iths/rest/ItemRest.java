@@ -41,9 +41,15 @@ public class ItemRest {
     @Path("getall")
     @GET
     public Response getAllItems() {
-
         List<Item> foundItems = itemService.getAllItems();
         return Response.ok(foundItems).build();
+    }
+
+    @Path("{id}")
+    @DELETE
+    public Response deleteItem(@PathParam("id") Long id) {
+        itemService.deleteItem(id);
+        return Response.ok().build();
     }
 
 
