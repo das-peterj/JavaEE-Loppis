@@ -36,7 +36,9 @@ public class ItemRest {
     public Response getItem(@PathParam("id") Long id) {
         Item foundItem = itemService.findItemById(id);
         if (foundItem == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("Item with ID " + id + " was not found in database")
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());
         }
         return Response.ok(foundItem).build();
     }
@@ -55,10 +57,24 @@ public class ItemRest {
         return Response.ok().build();
     }
 
+//    @Path("getallbycategory")
+//    @GET
+//    public Response getAllItemsByCategory(@QueryParam("category") String category) {
+//        // Here's the logic that filters all items of chosen category
+//
+//    }
+
     @Path("getname")
     @GET
     public Response getName(@QueryParam("name") String name) {
         return Response.status(200).entity("Users name is " + name).build();
+    }
+
+    @Path("updatename/{id}")
+    @PATCH
+    public Response updateName(@PathParam("id") Long id, @QueryParam("name") String name) {
+        Item updatedItem = itemService.updateName(id, name);
+        return Response.ok(updatedItem).build();
     }
 
 
