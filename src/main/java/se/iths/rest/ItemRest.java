@@ -35,6 +35,9 @@ public class ItemRest {
     @GET
     public Response getItem(@PathParam("id") Long id) {
         Item foundItem = itemService.findItemById(id);
+        if (foundItem == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
         return Response.ok(foundItem).build();
     }
 
@@ -50,6 +53,12 @@ public class ItemRest {
     public Response deleteItem(@PathParam("id") Long id) {
         itemService.deleteItem(id);
         return Response.ok().build();
+    }
+
+    @Path("getname")
+    @GET
+    public Response getName(@QueryParam("name") String name) {
+        return Response.status(200).entity("Users name is " + name).build();
     }
 
 
