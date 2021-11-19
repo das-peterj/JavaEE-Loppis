@@ -21,6 +21,11 @@ public class ItemRest {
     @POST
     public Response createItem(Item item){
         itemService.createItem(item);
+        if(item.getCategory().length() < 2) {
+            throw new WebApplicationException(Response.status(Response.Status.NOT_ACCEPTABLE)
+                    .entity("Category " + item.getCategory() + " is not long enough. Must be more 2 characters.")
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+        }
         return Response.ok(item).build();
     }
 
@@ -77,5 +82,59 @@ public class ItemRest {
         return Response.ok(updatedItem).build();
     }
 
+    //JPQL Queries
+    @Path("getallnames")
+    @GET
+    public List<Item> getAllNames() {
+        return itemService.getAllNames();
+    }
+
+    @Path("getallitemssortedbycategory")
+    @GET
+    public List<Item> getAllItemsSortedByCategory() {
+        return itemService.getAllItemsSortedByCategory();
+    }
+
+    @Path("selectmaxprice")
+    @GET
+    public double selectMaxPrice() {
+        return itemService.selectMaxPrice();
+    }
+
+    @Path("getallwithnamedquery")
+    @GET
+    public List<Item> getAllWithNamedQuery() {
+        return itemService.getAllWithNamedQuery();
+    }
+
+    @Path("updateprice")
+    @GET
+    public void updatePrice() {
+        itemService.updatePrice();
+    }
+
+    @Path("getbyname_dynamicquery/{name}")
+    @GET
+    public List<Item> getByNameDynamicQuery(@PathParam("name") String name) {
+        return itemService.getNameByDynamicQuery(name);
+    }
+
+    @Path("getbyname_named/{name}")
+    @GET
+    public List<Item> getByNameNamedParameter(@PathParam("name") String name) {
+        return itemService.getByNameNamedParameters(name);
+    }
+
+    @Path("getbyname_positional/{name}")
+    @GET
+    public List<Item> getByNamePositional(@PathParam("name") String name) {
+        return itemService.getByNamePositionalParameters(name);
+    }
+
+    @Path("getallitemsbetweenprice/{minPrice}/{maxPrice}")
+    @GET
+    public List<Item> getByNameDynamicQuery(@PathParam("minPrice") double minPrice, @PathParam("maxPrice") double maxPrice) {
+        return itemService.getAllItemsBetweenPrice(minPrice, maxPrice);
+    }
 
 }
